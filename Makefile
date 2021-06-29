@@ -56,14 +56,16 @@ uninstall:
 	rm -f $(INSTALL_DIR)/$(OUT_NAME)
 
 buildcurl: $(CURL_DIR)/Makefile
-	$(MAKE) -C $(CURL_DIR)
+	cd $(FULL_ROOT_DIR) && \
+	cd $(CURL_DIR) && \
+	make install
 
 $(CURL_DIR)/Makefile: $(CURL_DIR)/configure
-	cd $(FULL_ROOT_DIR)
-	cd $(CURL_DIR)
-	./configure --prefix=$(CURL_INSTALL_DIR)
+	cd $(FULL_ROOT_DIR) && \
+	cd $(CURL_DIR) && \
+	./configure --prefix=$(CURL_INSTALL_DIR) --with-gnutls
 
 $(CURL_DIR)/configure:
-	cd $(FULL_ROOT_DIR)
-	cd $(CURL_DIR)
+	cd $(FULL_ROOT_DIR) && \
+	cd $(CURL_DIR) && \
 	autoreconf -fi

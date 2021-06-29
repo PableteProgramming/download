@@ -1,5 +1,6 @@
 #ignore out directory
 /out/
+/externout/
 
 #ignore obj directory
 /obj/
@@ -32,7 +33,7 @@ __pycache__
 CHANGES.dist
 Debug
 INSTALL
-Makefile
+/extern/curl/Makefile
 Makefile.in
 Release
 TAGS
