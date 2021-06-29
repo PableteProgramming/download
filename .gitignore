@@ -1,0 +1,5 @@
+#ignore out directory
+/out/
+
+#ignore obj directory
+/obj/
