@@ -1,6 +1,8 @@
 #ignore out directory
 /out/
-/externout/
+!/externout/curl/
+/externout/curl/*
+!/externout/curl/include
 
 #ignore obj directory
 /obj/
