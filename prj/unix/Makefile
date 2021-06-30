@@ -1,4 +1,4 @@
-ROOT_DIR= .
+ROOT_DIR= ../..
 OBJ_DIR= $(ROOT_DIR)/obj
 OUT_DIR= $(ROOT_DIR)/out
 INSTALL_DIR= /usr/bin
