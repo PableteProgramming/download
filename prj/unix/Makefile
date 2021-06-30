@@ -1,6 +1,6 @@
 ROOT_DIR= ../..
-OBJ_DIR= $(ROOT_DIR)/obj
-OUT_DIR= $(ROOT_DIR)/out
+OBJ_DIR= $(ROOT_DIR)/obj/unix
+OUT_DIR= $(ROOT_DIR)/out/unix
 INSTALL_DIR= /usr/bin
 EXTERN_DIR= $(ROOT_DIR)/extern
 CURL_DIR= $(EXTERN_DIR)/curl
