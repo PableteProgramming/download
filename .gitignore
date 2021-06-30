@@ -7,6 +7,9 @@
 #ignore obj directory
 /obj/
 
+#ignore visual studio cache
+.vs/
+
 #ignore curl files
 *.asc
 *.dll
