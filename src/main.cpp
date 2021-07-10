@@ -4,7 +4,7 @@ int main(){
     std::cout<<"starting curl example"<<std::endl;
     CURL* curl;
     CURLcode result;
-
+    
     curl= curl_easy_init();
 
     if(curl){
