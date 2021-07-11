@@ -1,0 +1,2 @@
+cd ../../extern/curl
+buildconf
