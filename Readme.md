@@ -10,6 +10,10 @@ make
 
 ### On windows
 - locate to the prj/VS directory 
-- run buildconf.bat
+- run 
+```bash
+buildconf
+```
 - open the visual studio solution (download.sln)
+- Set the Solution build configuration as *Debug x86*
 - Build the solution with **Build->Build Solution**
