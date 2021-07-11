@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include <curl/curl.h>
 
 void HideCursor();
