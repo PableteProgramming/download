@@ -1,6 +1,7 @@
 #include <main.hpp>
 
 int main(){
+    hello();
     std::cout<<"starting curl example"<<std::endl;
     CURL* curl;
     CURLcode result;
