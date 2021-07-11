@@ -7,6 +7,9 @@
 #ignore obj directory
 /obj/
 
+#ignore lib dir
+/lib/
+
 #ignore visual studio cache
 .vs/
 
