@@ -2,7 +2,11 @@
 #include <windows.hpp>
 
 #include <Argsparser.hpp>
-#include <iostream>
-void hello() {
-	std::cout << "hello" << std::endl;
+ArgsParser::ArgsParser(std::vector<std::string> _options) {
+	options = _options;
+}
+void ArgsParser::Parse() {
+	for (int i = 0; i < options.size(); i++) {
+		std::cout << options[i] << std::endl;
+	}
 }

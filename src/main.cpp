@@ -1,7 +1,10 @@
 #include <main.hpp>
 
+
 int main(){
-    hello();
+    std::vector<std::string> opts = {"-o","--output","--url","-u"};
+    ArgsParser parser(opts);
+    parser.Parse();
     std::cout<<"starting curl example"<<std::endl;
     CURL* curl;
     CURLcode result;
