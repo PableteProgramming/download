@@ -4,6 +4,10 @@
 /externout/curl/*
 !/externout/curl/include
 
+!/externout/gtk/
+/externout/gtk/*
+!/externout/gtk/include
+
 #ignore obj directory
 /obj/
 
@@ -77,5 +81,6 @@ curl_fuzzer_seed_corpus.zip
 libstandaloneengine.a
 
 #ignore gtk files
+/extern/gtk/mesonBuild.txt
 /extern/gtk/builddir/
 /extern/gtk/subprojects/*/

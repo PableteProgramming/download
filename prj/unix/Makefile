@@ -11,6 +11,9 @@ CURL_INC_DIR= $(CURL_INSTALL_DIR)/include
 CURL_LIB_DIR= $(CURL_INSTALL_DIR)/lib
 FULL_ROOT_DIR= $(PWD)
 ARGSPARSER_DIR= $(ROOT_DIR)/ArgsParser
+GTK_DIR= $(EXTERN_DIR)/gtk
+GTK_INSTALL_DIR= $(PWD)/$(EXTERN_OUT_DIR)/gtk
+GTK_MESON_BUILD_DIR= $(FULL_ROOT_DIR)/$(GTK_DIR)/builddir
 
 ARGSPARSER_SRC_DIR= $(ARGSPARSER_DIR)/src
 ARGSPARSER_INC_DIR= $(ARGSPARSER_DIR)/include
@@ -41,7 +44,7 @@ ARGSPARSER_OUT_FILE= $(LIB_DIR)/$(ARGSPARSER_OUT_NAME)
 OUT_NAME= download
 OUT_FILE= $(OUT_DIR)/$(OUT_NAME)
 
-.PHONY: all clean cleanobj cleanlib rebuild install uninstall run buildcurl cleancurl
+.PHONY: all clean cleanobj cleanlib rebuild install uninstall run buildcurl cleancurl buildgtk cleangtk
 
 all: $(OUT_FILE)
 
@@ -51,7 +54,7 @@ $(OUT_FILE): $(OBJ_FILES) $(ARGSPARSER_OUT_FILE)
 	mkdir -p $(OUT_DIR)
 	cp $(ARGSPARSER_OUT_FILE) $(OUT_DIR)/$(ARGSPARSER_OUT_NAME)
 
-$(OBJ_FILES): buildcurl
+$(OBJ_FILES): buildcurl buildgtk
 $(OBJ_DIR)/%.$(LDEXT): $(SRC_DIR)/%.$(CXXEXT)
 	mkdir -p $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) $< -o $@
@@ -65,7 +68,7 @@ $(ARGSPARSER_OBJ_DIR)/%.$(LDEXT): $(ARGSPARSER_SRC_DIR)/%.$(CXXEXT)
 	mkdir -p $(ARGSPARSER_OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -fPIC $< -o $@
 
-clean: cleanobj cleancurl cleanlib
+clean: cleanobj cleancurl cleanlib cleangtk
 	rm -r -f $(OUT_DIR)
 
 cleanobj:
@@ -103,3 +106,18 @@ $(CURL_DIR)/configure:
 cleancurl:
 	rm -f $(CURL_DIR)/Makefile
 	rm -r -f $(CURL_INSTALL_DIR)
+
+buildgtk: $(GTK_DIR)/mesonBuild.txt
+	cd $(FULL_ROOT_DIR) && \
+	cd $(GTK_DIR)/builddir && \
+	ninja install
+
+$(GTK_DIR)/mesonBuild.txt:
+	cd $(FULL_ROOT_DIR) && \
+	cd $(GTK_DIR) && \
+	meson setup --prefix $(GTK_INSTALL_DIR) $(GTK_MESON_BUILD_DIR)
+	touch $(GTK_DIR)/mesonBuild.txt
+
+cleangtk:
+	rm -r -f $(GTK_MESON_BUILD_DIR)
+	rm -r -f $(GTK_DIR)/mesonBuild.txt
