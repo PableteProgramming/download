@@ -108,7 +108,9 @@
       <Command>$(SolutionDir)VSbuild.bat</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)..\..\lib\VS\ArgsParser.dll" "$(SolutionDir)..\..\out\VS"</Command>
+      <Command>copy "$(SolutionDir)..\..\lib\VS\ArgsParser.dll" "$(SolutionDir)..\..\out\VS"
+del "$(SolutionDir)\..\..\out\VS\$(ProjectName).ilk"
+del "$(SolutionDir)\..\..\out\VS\$(ProjectName).pdb"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -133,7 +135,9 @@
       <Command>$(SolutionDir)VSbuild.bat</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)..\..\lib\VS\ArgsParser.dll" "$(SolutionDir)..\..\out\VS"</Command>
+      <Command>copy "$(SolutionDir)..\..\lib\VS\ArgsParser.dll" "$(SolutionDir)..\..\out\VS"
+del "$(SolutionDir)\..\..\out\VS\$(ProjectName).ilk"
+del "$(SolutionDir)\..\..\out\VS\$(ProjectName).pdb"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -154,7 +158,9 @@
       <Command>$(SolutionDir)VSbuild.bat</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)..\..\lib\VS\ArgsParser.dll" "$(SolutionDir)..\..\out\VS"</Command>
+      <Command>copy "$(SolutionDir)..\..\lib\VS\ArgsParser.dll" "$(SolutionDir)..\..\out\VS"
+del "$(SolutionDir)\..\..\out\VS\$(ProjectName).ilk"
+del "$(SolutionDir)\..\..\out\VS\$(ProjectName).pdb"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -179,7 +185,9 @@
       <Command>$(SolutionDir)VSbuild.bat</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)..\..\lib\VS\ArgsParser.dll" "$(SolutionDir)..\..\out\VS"</Command>
+      <Command>copy "$(SolutionDir)..\..\lib\VS\ArgsParser.dll" "$(SolutionDir)..\..\out\VS"
+del "$(SolutionDir)\..\..\out\VS\$(ProjectName).ilk"
+del "$(SolutionDir)\..\..\out\VS\$(ProjectName).pdb"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
