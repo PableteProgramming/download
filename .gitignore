@@ -12,6 +12,7 @@
 
 #ignore visual studio cache
 .vs/
+*.aps
 
 #ignore curl files
 *.asc

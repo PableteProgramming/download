@@ -15,7 +15,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     wcex.hIcon = LoadIcon(wcex.hInstance, IDI_APPLICATION);
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    wcex.lpszMenuName = NULL;
+    wcex.lpszMenuName = MAKEINTRESOURCE(ID_MENU1);
     wcex.lpszClassName = szWindowClass;
     wcex.hIconSm = LoadIcon(wcex.hInstance, IDI_APPLICATION);
 
@@ -38,7 +38,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // hInstance: the first parameter from WinMain
     // NULL: not used in this application
     HWND hWnd = CreateWindowEx(NULL,szWindowClass, szTitle, WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, CW_USEDEFAULT, CW_USEDEFAULT, 500, 500, NULL, NULL, hInstance, NULL);
-
     if (!hWnd)
     {
         MessageBox(NULL, _T("Call to CreateWindow failed!"), szTitle, NULL);
@@ -62,15 +61,66 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    static HINSTANCE hInstance;
     switch (message)
     {
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        break;
-    default:
-        return DefWindowProc(hWnd, message, wParam, lParam);
-        break;
+        case WM_CREATE: {
+            hInstance = ((LPCREATESTRUCT)lParam)->hInstance;
+            CreateWindowEx(NULL, TEXT("BUTTON"), TEXT("Dialog"), WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON | WS_BORDER, 10, 10, 100, 100, hWnd, (HMENU)ID_BUTTON1, NULL, NULL);
+            break;
+        }
+        case WM_DESTROY: {
+            PostQuitMessage(0);
+            break;
+        }
+        case WM_COMMAND: {
+            switch (LOWORD(wParam)) {
+                case ID_BUTTON1:{
+                    DialogBox(hInstance,MAKEINTRESOURCE(DoneDialog),hWnd,DlgProc);
+                    break;
+                }
+                case ID_EXIT: {
+                    PostQuitMessage(0);
+                    break;
+                }
+                case ID_ONLINEHELP: {
+                    DialogBox(hInstance, MAKEINTRESOURCE(DoneDialog), hWnd, DlgProc);
+                    break;
+                }
+                case ID_OFFLINEHELP: {
+                    DialogBox(hInstance, MAKEINTRESOURCE(DoneDialog), hWnd, DlgProc);
+                    break;
+                }
+            }
+            break;
+        }
+        default: {
+            return DefWindowProc(hWnd, message, wParam, lParam);
+            break;
+        }
     }
-
     return 0;
+}
+
+INT_PTR CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+    switch (message) {
+        case WM_INITDIALOG: {
+            return TRUE;
+            break;
+        }
+        case WM_COMMAND: {
+            switch (LOWORD(wParam)) {
+                case IDOK: {
+                    EndDialog(hWnd, FALSE);
+                    break;
+                }
+                case IDCANCEL: {
+                    EndDialog(hWnd, FALSE);
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    return FALSE;
 }
