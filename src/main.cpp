@@ -1,39 +1,110 @@
 #include <main.hpp>
 
+int totaldotz = 40;
 
-int main(){
-    std::vector<std::string> opts = {"-o","--output","--url","-u"};
+int main(int argc, char** argv){
+    std::vector<std::string> opts = {"-o","--output","--url","-u","-v","--verbose"};
     ArgsParser parser(opts);
-    parser.Parse();
+    
+    //parse params
+    parser.Parse(parser.ConvertParams(argc,argv));
+    std::vector<std::pair<std::pair<std::string, std::string>, bool>> result = parser.GetResult();
+
+    //check if params are correct
+    bool outputFound = false;
+    std::string output = "";
+    bool urlFound = false;
+    std::string url = "";
+    bool verbose = false;
+
+    for (int i = 0; i < result.size(); i++) {
+        if (result[i].first.first=="-o" || result[i].first.first == "--output") {
+            if (result[i].second) {
+                output = result[i].first.second;
+                if (output != "") {
+                    std::cout << "output: " << output << std::endl;
+                    outputFound = true;
+                }
+            }
+        }
+        else if (result[i].first.first == "-u" || result[i].first.first == "--url") {
+            if (result[i].second) {
+                url = result[i].first.second;
+                if (url!="") {
+                    std::cout << "url: " << url << std::endl;
+                    urlFound = true;
+                }
+            }
+        }
+        else if (result[i].first.first == "-v" || result[i].first.first == "--verbose") {
+            if (result[i].second) {
+                verbose = true;
+            }
+        }
+    }
+
+    if (!outputFound || !urlFound) {
+        if (!outputFound && !urlFound) {
+            std::cout << "Please provide the following parameters:" << std::endl;
+            std::cout << "-o [file name] | --output [file name] => specify the output file name" << std::endl;
+            std::cout << "-u [url] | --url [url] => specify the url of the file to download" << std::endl;
+            std::cout << std::endl << "Optional parameters:" << std::endl;
+            std::cout << "-v | --verbose => enable verbose mode" << std::endl;
+        }
+        else if (!outputFound) {
+            std::cout << "Please provide the following parameters:" << std::endl;
+            std::cout << "-o [file name] | --output [file name] => specify the output file name" << std::endl;
+            std::cout << std::endl << "Optional parameters:" << std::endl;
+            std::cout << "-v | --verbose => enable verbose mode" << std::endl;
+        }
+        else {
+            std::cout << "Please provide the following parameters:" << std::endl;
+            std::cout << "-u [url] | --url [url] => specify the url of the file to download" << std::endl;
+            std::cout << std::endl << "Optional parameters:" << std::endl;
+            std::cout << "-v | --verbose => enable verbose mode" << std::endl;
+        }
+        ShowCursor();
+        return 1;
+    }
+
     std::cout<<"starting curl example"<<std::endl;
     CURL* curl;
-    CURLcode result;
+    CURLcode Curlresult;
     
     curl= curl_easy_init();
 
     if(curl){
-        curl_easy_setopt(curl,CURLOPT_URL, "https://github.com/PableteProgramming/hosting/raw/master/Cryption-win10-x86.exe");
+        curl_easy_setopt(curl,CURLOPT_URL, url.c_str());
         /* allow redirections */
         curl_easy_setopt(curl,CURLOPT_FOLLOWLOCATION, 1L);
-        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
-        curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, progress_func);
+
+        if (verbose) {
+            curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
+            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
+            curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, progress_func);
+        }
 
         FILE* file;
 
-        file = fopen("Cryption-win10-x86.exe", "wb");
+        file = fopen(output.c_str(), "wb");
 
         if (file) {
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
             HideCursor();
             /* do request */
-            result = curl_easy_perform(curl);
+            Curlresult = curl_easy_perform(curl);
             ShowCursor();
-            std::cout << std::endl;
-            if (result != CURLE_OK) {
+            if (Curlresult != CURLE_OK) {
                 std::cout << "request failed !" << std::endl;
             }
             else {
+                if (verbose) {
+                    std::cout << "\r";
+                    for (int i = 0; i < totaldotz+7; i++) {
+                        printf(" ");
+                    }
+                    std::cout << "\r";
+                }
                 std::cout << "request performed successfully!" << std::endl;
             }
             fclose(file);
@@ -60,7 +131,6 @@ int progress_func(void* ptr, double TotalToDownload, double NowDownloaded, doubl
     }
 
     // how wide you want the progress meter to be
-    int totaldotz = 40;
     double fractiondownloaded = NowDownloaded / TotalToDownload;
     // part of the progressmeter that's already "full"
     int dotz = (int)round(fractiondownloaded * totaldotz);
