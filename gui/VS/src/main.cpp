@@ -37,7 +37,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // NULL: this application does not have a menu bar
     // hInstance: the first parameter from WinMain
     // NULL: not used in this application
-    HWND hWnd = CreateWindowEx(NULL,szWindowClass, szTitle, WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, CW_USEDEFAULT, CW_USEDEFAULT, 500, 500, NULL, NULL, hInstance, NULL);
+    HWND hWnd = CreateWindowEx(NULL,szWindowClass, szTitle, WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, CW_USEDEFAULT, CW_USEDEFAULT, Wwidth, Wheight, NULL, NULL, hInstance, NULL);
     if (!hWnd)
     {
         MessageBox(NULL, _T("Call to CreateWindow failed!"), szTitle, NULL);
@@ -66,7 +66,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         case WM_CREATE: {
             hInstance = ((LPCREATESTRUCT)lParam)->hInstance;
-            CreateWindowEx(NULL, TEXT("BUTTON"), TEXT("Dialog"), WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON | WS_BORDER, 10, 10, 100, 100, hWnd, (HMENU)ID_BUTTON1, NULL, NULL);
+            CreateLayout(hWnd);
             break;
         }
         case WM_DESTROY: {
@@ -75,7 +75,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         case WM_COMMAND: {
             switch (LOWORD(wParam)) {
-                case ID_BUTTON1:{
+                case ID_CREATEBUTTON:{
                     DialogBox(hInstance,MAKEINTRESOURCE(DoneDialog),hWnd,DlgProc);
                     break;
                 }
@@ -123,4 +123,8 @@ INT_PTR CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
         }
     }
     return FALSE;
+}
+
+void CreateLayout(HWND hwnd) {
+    CreateWindowEx(NULL, TEXT("BUTTON"), TEXT("Download"), WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON | WS_BORDER, Wwidth - (35 + 100), Wheight-(25+100), 100, 50, hwnd, (HMENU)ID_CREATEBUTTON, NULL, NULL);
 }

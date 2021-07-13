@@ -3,7 +3,8 @@
 // Used by gui.rc
 //
 #define DoneDialog                      101
-#define ID_BUTTON1                      102
+#define HelpDialog                      101
+#define ID_CREATEBUTTON                 102
 #define ID_MENU1                        40001
 #define ID_EXIT                         40002
 #define ID_ONLINEHELP                   40003
