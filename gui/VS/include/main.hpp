@@ -5,7 +5,8 @@
 #include <resource.h>
 
 const int Wwidth= 400;
-const int Wheight=400;
+const int Wheight=245;
+const int offset = 50;
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
-void CreateLayout(HWND);
+void CreateLayout(HWND,HWND&,HWND&);

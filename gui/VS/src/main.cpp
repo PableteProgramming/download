@@ -62,12 +62,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     static HINSTANCE hInstance;
+    static HBRUSH hbrBkgnd=NULL;
     switch (message)
     {
         case WM_CREATE: {
             hInstance = ((LPCREATESTRUCT)lParam)->hInstance;
-            CreateLayout(hWnd);
+            HWND urlTextBox;
+            HWND filenameTextBox;
+            CreateLayout(hWnd,urlTextBox,filenameTextBox);
             break;
+        }
+        case WM_CTLCOLORSTATIC: {
+            HDC hdcStatic = (HDC)wParam;
+            SetTextColor(hdcStatic, RGB(0, 0, 0));
+            SetBkColor(hdcStatic, RGB(255, 255, 255));
+
+            if (hbrBkgnd == NULL)
+            {
+                hbrBkgnd = CreateSolidBrush(RGB(255, 255, 255));
+            }
+            return (INT_PTR)hbrBkgnd;
         }
         case WM_DESTROY: {
             PostQuitMessage(0);
@@ -125,6 +139,10 @@ INT_PTR CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
     return FALSE;
 }
 
-void CreateLayout(HWND hwnd) {
-    CreateWindowEx(NULL, TEXT("BUTTON"), TEXT("Download"), WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON | WS_BORDER, Wwidth - (35 + 100), Wheight-(25+100), 100, 50, hwnd, (HMENU)ID_CREATEBUTTON, NULL, NULL);
+void CreateLayout(HWND hwnd, HWND& urlTextBox, HWND& filenameTextBox) {
+    CreateWindowEx(NULL, TEXT("BUTTON"), TEXT("Download"), WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON | WS_BORDER, 10 , Wheight-(25+140) + offset, Wwidth-40, 50, hwnd, (HMENU)ID_CREATEBUTTON, NULL, NULL);
+    CreateWindowEx(NULL, TEXT("STATIC"), TEXT("Url:"), WS_VISIBLE | WS_CHILD , 10, 12 + offset, 40, 20, hwnd, NULL, NULL, NULL);
+    urlTextBox= CreateWindowEx(NULL, TEXT("EDIT"), TEXT(""), WS_VISIBLE | ES_LEFT | WS_CHILD | WS_BORDER, 40, 10 + offset, Wwidth - 70, 20, hwnd, NULL, NULL, NULL);
+    CreateWindowEx(NULL, TEXT("STATIC"), TEXT("Output filename:"), WS_VISIBLE | WS_CHILD, 10, 52 + offset, 150, 20, hwnd, NULL, NULL, NULL);
+    filenameTextBox= CreateWindowEx(NULL, TEXT("EDIT"), TEXT(""), WS_VISIBLE | ES_LEFT | WS_CHILD | WS_BORDER, 120,50 + offset, Wwidth- 150, 20, hwnd, NULL, NULL, NULL);
 }
