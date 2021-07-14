@@ -4,7 +4,7 @@
 #include <tchar.h>
 #include <resource.h>
 
-const int Wwidth= 400;
+const int Wwidth= 730;
 const int Wheight=245;
 const int offset = 50;
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

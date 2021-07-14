@@ -18,12 +18,18 @@
     <ClCompile Include="..\..\gui\VS\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\gui\src\request.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\gui\VS\include\main.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\gui\VS\rc\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gui\include\request.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
