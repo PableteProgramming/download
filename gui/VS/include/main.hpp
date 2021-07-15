@@ -5,10 +5,13 @@
 #include <string>
 #include <resource.h>
 #include <codecvt>
+#include <request.hpp>
 
 const int Wwidth= 730;
 const int Wheight=315;
 const int offset = 50;
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
-void CreateLayout(HWND,HWND&,HWND&);
+void CreateLayout(HWND);
+void ButtonClicked(HWND);
+std::string GetEditBoxText(HWND);

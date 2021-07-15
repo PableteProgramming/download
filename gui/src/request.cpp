@@ -23,6 +23,7 @@ std::pair<int, std::string> DoRequest(std::string url, std::string filename) {
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
             /* do request */
             Curlresult = curl_easy_perform(curl);
+            fclose(file);
             if (Curlresult != CURLE_OK) {
                 return std::make_pair(1,"request failed !");
                 //std::cout << "request failed !" << std::endl;
@@ -31,7 +32,6 @@ std::pair<int, std::string> DoRequest(std::string url, std::string filename) {
                 return std::make_pair(0,"request performed successfully!");
                 //std::cout << "request performed successfully!" << std::endl;
             }
-            fclose(file);
         }
         else {
             return std::make_pair(1,"error while opening file");
@@ -49,8 +49,15 @@ std::pair<int, std::string> DoRequest(std::string url, std::string filename) {
 
 int progress_func(void* ptr, double TotalToDownload, double NowDownloaded, double TotalToUpload, double NowUploaded){
     double percentage = NowDownloaded / TotalToDownload * 100;
+    //percentage = roundoff(percentage, 2);
     std::string sPercentage = std::to_string(percentage);
-    std::string info = std::to_string(NowDownloaded) + "/" + std::to_string(TotalToDownload);
-    UpdateProgress(sPercentage, info);
+    
+    UpdateProgress(sPercentage);
+
     return 0;
+}
+
+double roundoff(double  value, unsigned char prec) {
+    double pow_10 = pow(10.0f, (float)prec);
+    return round(value * pow_10) / pow_10;
 }

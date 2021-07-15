@@ -5,6 +5,11 @@ static TCHAR szTitle[] = _T("Download Files from the Web");
 
 HWND percentageBox = NULL;
 HWND doneBox = NULL;
+HWND urlTextBox = NULL;
+HWND filenameTextBox = NULL;
+HWND statusBox = NULL;
+std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+int maxnums = 2;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow){
     
@@ -70,9 +75,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         case WM_CREATE: {
             hInstance = ((LPCREATESTRUCT)lParam)->hInstance;
-            HWND urlTextBox;
-            HWND filenameTextBox;
-            CreateLayout(hWnd,urlTextBox,filenameTextBox);
+            CreateLayout(hWnd);
             break;
         }
         case WM_CTLCOLORSTATIC: {
@@ -92,8 +95,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         case WM_COMMAND: {
             switch (LOWORD(wParam)) {
-                case ID_CREATEBUTTON:{
-                    DialogBox(hInstance,MAKEINTRESOURCE(DoneDialog),hWnd,DlgProc);
+                case ID_DOWNLOADBUTTON:{
+                    ButtonClicked(hWnd);
+                    //DialogBox(hInstance,MAKEINTRESOURCE(DoneDialog),hWnd,DlgProc);
                     break;
                 }
                 case ID_EXIT: {
@@ -142,16 +146,16 @@ INT_PTR CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
     return FALSE;
 }
 
-void CreateLayout(HWND hwnd, HWND& urlTextBox, HWND& filenameTextBox) {
-    CreateWindowEx(NULL, TEXT("BUTTON"), TEXT("Download"), WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON | WS_BORDER, 10 , Wheight-(25+145) + offset, Wwidth-40, 50, hwnd, (HMENU)ID_CREATEBUTTON, NULL, NULL);
+void CreateLayout(HWND hwnd) {
+    CreateWindowEx(NULL, TEXT("BUTTON"), TEXT("Download"), WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON | WS_BORDER, 10 , Wheight-(25+145) + offset, Wwidth-40, 50, hwnd, (HMENU)ID_DOWNLOADBUTTON, NULL, NULL);
     CreateWindowEx(NULL, TEXT("STATIC"), TEXT("Url:"), WS_VISIBLE | WS_CHILD , 10, 12 + offset, 40, 20, hwnd, NULL, NULL, NULL);
     urlTextBox= CreateWindowEx(NULL, TEXT("EDIT"), TEXT(""), WS_VISIBLE | ES_LEFT | WS_CHILD | WS_BORDER, 40, 10 + offset, Wwidth - 70, 20, hwnd, NULL, NULL, NULL);
     CreateWindowEx(NULL, TEXT("STATIC"), TEXT("Output filename:"), WS_VISIBLE | WS_CHILD, 10, 52 + offset, 150, 20, hwnd, NULL, NULL, NULL);
     filenameTextBox= CreateWindowEx(NULL, TEXT("EDIT"), TEXT(""), WS_VISIBLE | ES_LEFT | WS_CHILD | WS_BORDER, 120,50 + offset, Wwidth- 150, 20, hwnd, NULL, NULL, NULL);
-    CreateWindowEx(NULL, TEXT("STATIC"), TEXT("Percentage"), WS_VISIBLE | WS_CHILD, 10, 82 + offset, 100, 20, hwnd, NULL, NULL, NULL);
-    CreateWindowEx(NULL, TEXT("STATIC"), TEXT("Progress"), WS_VISIBLE | WS_CHILD, 10, 112 + offset, 80, 20, hwnd, NULL, NULL, NULL);
-    percentageBox = CreateWindowEx(NULL, TEXT("STATIC"), TEXT("---%"), WS_VISIBLE | WS_CHILD, 110, 82 + offset, 40, 20, hwnd, NULL, NULL, NULL);
-    doneBox = CreateWindowEx(NULL, TEXT("STATIC"), TEXT("-/-"), WS_VISIBLE | WS_CHILD, 90, 112 + offset, Wwidth - 40, 20, hwnd, NULL, NULL, NULL);
+    CreateWindowEx(NULL, TEXT("STATIC"), TEXT("Status:"), WS_VISIBLE | WS_CHILD, 10, 85 + offset, 70, 20, hwnd, NULL, NULL, NULL);
+    statusBox = CreateWindowEx(NULL, TEXT("STATIC"), TEXT("Waiting"), WS_VISIBLE | WS_CHILD, 110, 85 + offset, Wwidth - 40, 20, hwnd, NULL, NULL, NULL);
+    CreateWindowEx(NULL, TEXT("STATIC"), TEXT("Percentage"), WS_VISIBLE | WS_CHILD, 10, 112 + offset, 100, 20, hwnd, NULL, NULL, NULL);
+    percentageBox = CreateWindowEx(NULL, TEXT("STATIC"), TEXT("---%"), WS_VISIBLE | WS_CHILD, 110, 112 + offset, Wwidth-40, 20, hwnd, NULL, NULL, NULL);
     
     //Logo
     /*CreateWindowEx(NULL, TEXT("STATIC"), TEXT("d8888b.  .d88b.  db   d8b   db d8b   db db       .d88b.   .d8b.  d8888b."), WS_VISIBLE | WS_CHILD, 10, 10, 720, 20, hwnd, NULL, NULL, NULL);
@@ -162,8 +166,46 @@ void CreateLayout(HWND hwnd, HWND& urlTextBox, HWND& filenameTextBox) {
     CreateWindowEx(NULL, TEXT("STATIC"), TEXT("Y8888D'  `Y88P'   `8b8' `8d8'  VP   V8P Y88888P  `Y88P'  YP   YP Y8888D'"), WS_VISIBLE | WS_CHILD, 10, 110, 720, 20, hwnd, NULL, NULL, NULL);*/
 }
 
-void UpdateProgress(std::string percentage, std::string done) {
-    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+void UpdateProgress(std::string percentage) {
     SetWindowText(percentageBox, converter.from_bytes(percentage).c_str());
-    SetWindowText(doneBox, converter.from_bytes(done).c_str());
+}
+
+void ButtonClicked(HWND hwnd) {
+    std::string url = GetEditBoxText(urlTextBox);
+    std::string filename = GetEditBoxText(filenameTextBox);
+    MessageBox(hwnd, _T("While downloading the file, the program may \"not respond\". This is due to the graphics updates. So please, don't close the program, just let it finish downloading the file"), _T("Info"), MB_OK | MB_ICONINFORMATION);
+    if (url.empty() || filename.empty()) {
+        if (url.empty() && filename.empty()) {
+            MessageBox(hwnd, _T("Please provide an url and an output file name !"), _T("Error"), MB_OK | MB_ICONERROR);
+        }
+        else if (url.empty()) {
+            MessageBox(hwnd, _T("Please provide an url !"), _T("Error"), MB_OK | MB_ICONERROR);
+        }
+        else {
+            MessageBox(hwnd, _T("Please provide an output file name !"), _T("Error"), MB_OK | MB_ICONERROR);
+        }
+        return;
+    }
+
+    //do request
+    SetWindowText(statusBox, _T("Downloading"));
+    std::pair<int, std::string> result = DoRequest(url, filename);
+    if (result.first == 1) {
+        SetWindowText(statusBox, _T("Error"));
+        MessageBox(hwnd, converter.from_bytes(result.second).c_str(), _T("Error"), MB_OK | MB_ICONERROR);
+    }
+    else {
+        SetWindowText(statusBox, _T("Done"));
+        MessageBox(hwnd, converter.from_bytes(result.second).c_str(), _T("Success"), MB_OK | MB_ICONINFORMATION);
+    }
+}
+
+std::string GetEditBoxText(HWND hwnd) {
+    int l = GetWindowTextLength(hwnd) + 1;
+    char* cs = new char[l];
+    LPWSTR pszMem = (LPWSTR)VirtualAlloc((LPVOID)NULL, (DWORD)(l), MEM_COMMIT, PAGE_READWRITE);
+    GetWindowText(hwnd, pszMem, l);
+    std::wstring ws = pszMem;
+    std::string s(ws.begin(), ws.end());
+    return s;
 }
