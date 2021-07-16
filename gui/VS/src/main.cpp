@@ -158,12 +158,6 @@ void CreateLayout(HWND hwnd) {
     percentageBox = CreateWindowEx(NULL, TEXT("STATIC"), TEXT("---%"), WS_VISIBLE | WS_CHILD, 110, 112 + offset, Wwidth-40, 20, hwnd, NULL, NULL, NULL);
     
     //Logo
-    /*CreateWindowEx(NULL, TEXT("STATIC"), TEXT("d8888b.  .d88b.  db   d8b   db d8b   db db       .d88b.   .d8b.  d8888b."), WS_VISIBLE | WS_CHILD, 10, 10, 720, 20, hwnd, NULL, NULL, NULL);
-    CreateWindowEx(NULL, TEXT("STATIC"), TEXT("88  `8D .8P  Y8. 88   I8I   88 888o  88 88      .8P  Y8. d8' `8b 88  `8D"), WS_VISIBLE | WS_CHILD, 10, 30, 720, 20, hwnd, NULL, NULL, NULL);
-    CreateWindowEx(NULL, TEXT("STATIC"), TEXT("88   88 88    88 88   I8I   88 88V8o 88 88      88    88 88ooo88 88   88"), WS_VISIBLE | WS_CHILD, 10, 50, 720, 20, hwnd, NULL, NULL, NULL);
-    CreateWindowEx(NULL, TEXT("STATIC"), TEXT("88   88 88    88 Y8   I8I   88 88 V8o88 88      88    88 88~~~88 88   88"), WS_VISIBLE | WS_CHILD, 10, 70, 720, 20, hwnd, NULL, NULL, NULL);
-    CreateWindowEx(NULL, TEXT("STATIC"), TEXT("88  .8D `8b  d8' `8b d8'8b d8' 88  V888 88booo. `8b  d8' 88   88 88  .8D"), WS_VISIBLE | WS_CHILD, 10, 90, 720, 20, hwnd, NULL, NULL, NULL);
-    CreateWindowEx(NULL, TEXT("STATIC"), TEXT("Y8888D'  `Y88P'   `8b8' `8d8'  VP   V8P Y88888P  `Y88P'  YP   YP Y8888D'"), WS_VISIBLE | WS_CHILD, 10, 110, 720, 20, hwnd, NULL, NULL, NULL);*/
 }
 
 void UpdateProgress(std::string percentage) {
